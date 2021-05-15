@@ -24,12 +24,13 @@ the value for the dns record (typically the ipv4 address)
 - `hetzner_dns_record_ttl`: 600
 the ttl for the dns record
 
-
-## Create or update
+- `hetzner_dns_record_delete`: no
+if the record should be deleted instead of creating
+## Create, delete or update
 The dns record is identified by
 - `hetzner_dns_api_token`
 - `hetzner_dns_zone_name`
 - `hetzner_dns_record_name`
 - `hetzner_dns_record_type`
 
-If the dns record is found, it will be updated, otherwise it will be created.
+If the dns record is found, it will be updated, otherwise it will be created or deleted depending on `hetzner_dns_record_delete`.
