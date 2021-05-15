@@ -2,5 +2,7 @@
 
 galaxy_info:
   role_name: hetzner-dns
+  description: manage hetzner dns records
+  author: l-with
 
 ...
