@@ -26,6 +26,10 @@ the ttl for the dns record
 
 - `hetzner_dns_record_delete`: no
 if the record should be deleted instead of creating
+
+- `hetzner_dns_debug`: no
+if debug information should be printed
+
 ## Create, delete or update
 The dns record is identified by
 - `hetzner_dns_api_token`
