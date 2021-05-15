@@ -78,6 +78,8 @@
       ttl: "{{ hetzner_dns_record_ttl }}"
   delegate_to: localhost
   when: (_hetzner_dns_record_id | length) <= 0
+          and not hetzner_dns_record_delete 
+  changed_when: true
 
 - name: Update hetzner dns record
   ansible.builtin.uri:
@@ -93,6 +95,21 @@
       value: "{{ hetzner_dns_record_value }}"
       ttl: "{{ hetzner_dns_record_ttl }}"
   delegate_to: localhost
-  when: (_hetzner_dns_record_id | length) == 1 and (_hetzner_dns_record_id_exact | length) <= 0
+  when: (_hetzner_dns_record_id | length) == 1 
+          and (_hetzner_dns_record_id_exact | length) <= 0 
+          and not hetzner_dns_record_delete 
+  changed_when: true
+
+- name: Delete hetzner dns record
+  ansible.builtin.uri:
+    url: "{{ hetzner_dns_api_url}}/records/{{ _hetzner_dns_record_id[0] }}"
+    headers:
+      Auth-API-Token: "{{ hetzner_dns_api_token }}"
+    method: DELETE
+  delegate_to: localhost
+  when: (_hetzner_dns_record_id | length) == 1 
+          and (_hetzner_dns_record_id_exact | length) == 1
+          and  hetzner_dns_record_delete 
+  changed_when: true
 
 ...
