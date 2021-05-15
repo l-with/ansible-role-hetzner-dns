@@ -21,7 +21,7 @@ the type for the dns record
 - `hetzner_dns_record_value`
 the value for the dns record (typically the ipv4 address)
 
-- `hetzner_dns_record_ttl`: 600
+- `hetzner_dns_record_ttl`: 60
 the ttl for the dns record
 
 - `hetzner_dns_record_delete`: no
