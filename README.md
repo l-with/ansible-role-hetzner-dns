@@ -1,6 +1,9 @@
 # Ansible Role Hetzner DNS
 Manages DNS records with [Hetzner DNS Public API](https://dns.hetzner.com/api-docs)
 
+Because the role is only using [ansible.builtin.uri](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/uri_module.html), [ansible.builtin.debug](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/debug_module.html) and [ansible.builtin.set_fact](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/set_fact_module.html)
+it can be used with localhost.
+
 ## Role Variables
 
 - `hetzner_dns_api_token`
