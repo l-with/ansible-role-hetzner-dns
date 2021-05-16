@@ -24,8 +24,8 @@ the value for the dns record (typically the ipv4 address)
 - `hetzner_dns_record_ttl`: 60
 the ttl for the dns record
 
-- `hetzner_dns_record_delete`: no
-if the record should be deleted instead of creating
+- `hetzner_dns_record_create_or_delete`: "create"
+specifies if the record should be created ("create") or deleted ("delete")
 
 - `hetzner_dns_debug`: no
 if debug information should be printed
