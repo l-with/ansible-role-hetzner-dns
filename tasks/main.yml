@@ -1,6 +1,5 @@
 ---
 
--
 - name: Gather hetzner dns zones
   ansible.builtin.uri:
     url: "{{ hetzner_dns_api_url}}/zones"
