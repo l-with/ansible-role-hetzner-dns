@@ -2,7 +2,7 @@
 
 - name: Gather hetzner dns zones
   ansible.builtin.uri:
-    url: "{{ hetzner_dns_api_url}}/zones"
+    url: "{{ hetzner_dns_api_url }}/zones"
     headers:
       Auth-API-Token: "{{ hetzner_dns_api_token }}"
   delegate_to: localhost
@@ -23,7 +23,7 @@
 
 - name: Gather hetzner dns zone records for "{{ _hetzner_dns_zone_id }}"
   ansible.builtin.uri:
-    url: "{{ hetzner_dns_api_url}}/records?zone_id={{ _hetzner_dns_zone_id }}"
+    url: "{{ hetzner_dns_api_url }}/records?zone_id={{ _hetzner_dns_zone_id }}"
     headers:
       Auth-API-Token: "{{ hetzner_dns_api_token }}"
   delegate_to: localhost
@@ -80,7 +80,7 @@
 
 - name: Create hetzner dns record
   ansible.builtin.uri:
-    url: "{{ hetzner_dns_api_url}}/records"
+    url: "{{ hetzner_dns_api_url }}/records"
     body_format: json
     headers:
       Auth-API-Token: "{{ hetzner_dns_api_token }}"
@@ -98,7 +98,7 @@
 
 - name: Update hetzner dns record
   ansible.builtin.uri:
-    url: "{{ hetzner_dns_api_url}}/records/{{ _hetzner_dns_record_id[0] }}"
+    url: "{{ hetzner_dns_api_url }}/records/{{ _hetzner_dns_record_id[0] }}"
     body_format: json
     headers:
       Auth-API-Token: "{{ hetzner_dns_api_token }}"
@@ -117,7 +117,7 @@
 
 - name: Delete hetzner dns record
   ansible.builtin.uri:
-    url: "{{ hetzner_dns_api_url}}/records/{{ _hetzner_dns_record_id[0] }}"
+    url: "{{ hetzner_dns_api_url }}/records/{{ _hetzner_dns_record_id[0] }}"
     headers:
       Auth-API-Token: "{{ hetzner_dns_api_token }}"
     method: delete

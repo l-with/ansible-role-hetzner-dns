@@ -1,8 +1,14 @@
 ---
 
 galaxy_info:
-  role_name: hetzner-dns
+  role_name: hetzner_dns
   description: manage hetzner dns records
-  author: l-with
+  author: l_with
+  license: MIT
+  license_file: LICENSE
+  min_ansible_version: 2.9
+  platforms:
+  - name: Ubuntu
+    versions: focal
 
 ...
