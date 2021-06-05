@@ -1,5 +1,7 @@
 ---
 
+# prepare informations
+
 - name: Gather hetzner dns zones
   ansible.builtin.uri:
     url: "{{ hetzner_dns_api_url }}/zones"
@@ -42,6 +44,8 @@
   ansible.builtin.debug:
     msg: "{{ _hetzner_dns_records }}"
   when: hetzner_dns_debug
+
+# start handling dns record
 
 - name: Set fact _hetzner_dns_record_id for "{{ hetzner_dns_record_name }}", "{{ hetzner_dns_record_type }}"
   ansible.builtin.set_fact:
