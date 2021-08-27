@@ -19,7 +19,7 @@
   ansible.builtin.set_fact:
     _hetzner_dns_zone_ids: "{{ output.json.zones | items2dict(key_name='name', value_name='id') }}"
 
-- name: Print hetzner dns zonen ids
+- name: Print hetzner dns zone ids
   ansible.builtin.debug:
     msg: "{{ _hetzner_dns_zone_ids }}"
   when: hetzner_dns_debug
