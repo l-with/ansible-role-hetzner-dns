@@ -5,5 +5,7 @@ hetzner_dns_record_ttl: 60
 hetzner_dns_record_type: "A"
 hetzner_dns_record_delete: no
 hetzner_dns_debug: no
+hetzner_dns_dry_run: no
+hetzner_dns_dry_run_fail: yes
 
 ...
