@@ -19,11 +19,16 @@
   ansible.builtin.set_fact:
     _hetzner_dns_zone_ids: "{{ output.json.zones | items2dict(key_name='name', value_name='id') }}"
 
-- name: Set fact _hetzner_dns_zone_id
+- name: Print hetzner dns zonen ids
+  ansible.builtin.debug:
+    msg: "{{ _hetzner_dns_zone_ids }}"
+  when: hetzner_dns_debug
+
+- name: Set fact _hetzner_dns_zone_id of "{{ hetzner_dns_zone_name }}"
   ansible.builtin.set_fact:
     _hetzner_dns_zone_id: "{{ _hetzner_dns_zone_ids[hetzner_dns_zone_name] }}"
 
-- name: Gather hetzner dns zone records for "{{ _hetzner_dns_zone_id }}"
+- name: Gather hetzner dns zone records of "{{ _hetzner_dns_zone_id }}"
   ansible.builtin.uri:
     url: "{{ hetzner_dns_api_url }}/records?zone_id={{ _hetzner_dns_zone_id }}"
     headers:
