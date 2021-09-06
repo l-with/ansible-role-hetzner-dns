@@ -71,6 +71,7 @@
     _hetzner_dns_record_id_exact: "{{ _hetzner_dns_records 
       | selectattr('name', 'equalto', hetzner_dns_record_name)
       | selectattr('type', 'equalto', hetzner_dns_record_type)
+      | selectattr('value', 'equalto', hetzner_dns_record_value)
       | map(attribute='id')
       | list
     }}"
