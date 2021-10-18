@@ -76,6 +76,11 @@
       | list
     }}"
 
+- name: Print _hetzner_dns_record_id_exact for "{{ hetzner_dns_record_name }}", "{{ hetzner_dns_record_type }}", "{{ hetzner_dns_record_value }}"
+  ansible.builtin.debug:
+    msg: "{{ _hetzner_dns_record_id_exact }}"
+  when: hetzner_dns_debug
+
 - name: Print number of elements in _hetzner_dns_record_id_exact
   ansible.builtin.debug:
     msg: "{{ _hetzner_dns_record_id_exact | length }}"
