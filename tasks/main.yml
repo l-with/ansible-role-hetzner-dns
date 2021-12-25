@@ -48,7 +48,7 @@
 - name: Print _dns_records for "{{ _dns_zone_id }}"
   ansible.builtin.debug:
     msg: "{{ _dns_records }}"
-  when: _dns_debug
+  when: dns_debug
 
 # start handling dns record
 
