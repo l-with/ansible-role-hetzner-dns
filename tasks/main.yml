@@ -2,187 +2,185 @@
 
 # prepare informations
 
-- name: Gather hetzner dns zones
+- name: Gather dns zones
   ansible.builtin.uri:
-    url: "{{ hetzner_dns_api_url }}/zones"
+    url: "{{ dns_api_url }}/zones"
     headers:
-      Auth-API-Token: "{{ hetzner_dns_api_token }}"
+      Auth-API-Token: "{{ dns_api_token }}"
   delegate_to: localhost
   register: output
 
-- name: Print hetzner dns zones
+- name: Print dns zones
   ansible.builtin.debug:
     msg: "{{ output.json.zones }}"
-  when: hetzner_dns_debug
+  when: dns_debug
 
-- name: Set fact _hetzner_dns_zone_ids
+- name: Set fact _dns_zone_ids
   ansible.builtin.set_fact:
-    _hetzner_dns_zone_ids: "{{ output.json.zones | items2dict(key_name='name', value_name='id') }}"
+    _dns_zone_ids: "{{ output.json.zones | items2dict(key_name='name', value_name='id') }}"
 
-- name: Print hetzner dns zone ids
+- name: Print dns zone ids
   ansible.builtin.debug:
-    msg: "{{ _hetzner_dns_zone_ids }}"
-  when: hetzner_dns_debug
+    msg: "{{ _dns_zone_ids }}"
+  when: dns_debug
 
-- name: Set fact _hetzner_dns_zone_id of "{{ hetzner_dns_zone_name }}"
+- name: Set fact _dns_zone_id of "{{ dns_zone_name }}"
   ansible.builtin.set_fact:
-    _hetzner_dns_zone_id: "{{ _hetzner_dns_zone_ids[hetzner_dns_zone_name] }}"
+    _dns_zone_id: "{{ _dns_zone_ids[dns_zone_name] }}"
 
-- name: Gather hetzner dns zone records of "{{ _hetzner_dns_zone_id }}"
+- name: Gather dns zone records of "{{ _dns_zone_id }}"
   ansible.builtin.uri:
-    url: "{{ hetzner_dns_api_url }}/records?zone_id={{ _hetzner_dns_zone_id }}"
+    url: "{{ dns_api_url }}/records?zone_id={{ _dns_zone_id }}"
     headers:
-      Auth-API-Token: "{{ hetzner_dns_api_token }}"
+      Auth-API-Token: "{{ dns_api_token }}"
   delegate_to: localhost
   register: output
 
-- name: Print hetzner zone records of "{{ _hetzner_dns_zone_id }}"
+- name: Print zone records of "{{ _dns_zone_id }}"
   ansible.builtin.debug:
     msg: "{{ output.json.records }}"
-  when: hetzner_dns_debug
+  when: dns_debug
 
-- name: Set fact _hetzner_dns_records for "{{ _hetzner_dns_zone_id }}"
+- name: Set fact _dns_records for "{{ _dns_zone_id }}"
   ansible.builtin.set_fact:
-    _hetzner_dns_records: "{{ output.json.records }}"
+    _dns_records: "{{ output.json.records }}"
 
-- name: Print _hetzner_dns_records for "{{ _hetzner_dns_zone_id }}"
+- name: Print _dns_records for "{{ _dns_zone_id }}"
   ansible.builtin.debug:
-    msg: "{{ _hetzner_dns_records }}"
-  when: hetzner_dns_debug
+    msg: "{{ _dns_records }}"
+  when: dns_debug
 
 # start handling dns record
 
-- name: Set fact _hetzner_dns_record_id for "{{ hetzner_dns_record_name }}", "{{ hetzner_dns_record_type }}"
+- name: Set fact _dns_record_id for "{{ dns_record_name }}", "{{ dns_record_type }}"
   ansible.builtin.set_fact:
-    _hetzner_dns_record_id: "{{ _hetzner_dns_records 
-      | selectattr('name', 'equalto', hetzner_dns_record_name)
-      | selectattr('type', 'equalto', hetzner_dns_record_type)
+    _dns_record_id: "{{ _dns_records 
+      | selectattr('name', 'equalto', dns_record_name)
+      | selectattr('type', 'equalto', dns_record_type)
       | map(attribute='id')
-      | list
-    }}"
+      | list }}"
 
-- name: Print number of elements in _hetzner_dns_record_id
+- name: Print number of elements in _dns_record_id
   ansible.builtin.debug:
-    msg: "{{ _hetzner_dns_record_id | length }}"
-  when: hetzner_dns_debug
+    msg: "{{ _dns_record_id | length }}"
+  when: dns_debug
 
-- name: Set fact _hetzner_dns_record_id_exact for "{{ hetzner_dns_record_name }}", "{{ hetzner_dns_record_type }}", "{{ hetzner_dns_record_value }}"
+- name: Set fact _dns_record_id_exact for "{{ dns_record_name }}", "{{ dns_record_type }}", "{{ dns_record_value }}"
   ansible.builtin.set_fact:
-    _hetzner_dns_record_id_exact: "{{ _hetzner_dns_records 
-      | selectattr('name', 'equalto', hetzner_dns_record_name)
-      | selectattr('type', 'equalto', hetzner_dns_record_type)
-      | selectattr('value', 'equalto', hetzner_dns_record_value)
+    _dns_record_id_exact: "{{ _dns_records 
+      | selectattr('name', 'equalto', dns_record_name)
+      | selectattr('type', 'equalto', dns_record_type)
+      | selectattr('value', 'equalto', dns_record_value)
       | map(attribute='id')
-      | list
-    }}"
+      | list }}"
 
-- name: Print _hetzner_dns_record_id_exact for "{{ hetzner_dns_record_name }}", "{{ hetzner_dns_record_type }}", "{{ hetzner_dns_record_value }}"
+- name: Print _dns_record_id_exact for "{{ dns_record_name }}", "{{ dns_record_type }}", "{{ dns_record_value }}"
   ansible.builtin.debug:
-    msg: "{{ _hetzner_dns_record_id_exact }}"
-  when: hetzner_dns_debug
+    msg: "{{ _dns_record_id_exact }}"
+  when: dns_debug
 
-- name: Print number of elements in _hetzner_dns_record_id_exact
+- name: Print number of elements in _dns_record_id_exact
   ansible.builtin.debug:
-    msg: "{{ _hetzner_dns_record_id_exact | length }}"
-  when: hetzner_dns_debug
+    msg: "{{ _dns_record_id_exact | length }}"
+  when: dns_debug
 
-- name: Print hetzner_dns_record_delete
+- name: Print dns_record_delete
   ansible.builtin.debug:
-    msg: "{{ hetzner_dns_record_delete }}"
-  when: hetzner_dns_debug
+    msg: "{{ dns_record_delete }}"
+  when: dns_debug
 
-- name: Print create hetzner dns record
+- name: Print create dns record
   ansible.builtin.debug:
     msg: |
-      Create hetzner dns record
-        zone_id: "{{ _hetzner_dns_zone_id }}"
-        name: "{{ hetzner_dns_record_name }}"
-        type: "{{ hetzner_dns_record_type }}"
-        value: "{{ hetzner_dns_record_value }}"
-        ttl: "{{ hetzner_dns_record_ttl }}"
-  when: (_hetzner_dns_record_id | length) <= 0
-          and not hetzner_dns_record_delete
-          and hetzner_dns_debug
+      Create dns record
+        zone_id: "{{ _dns_zone_id }}"
+        name: "{{ dns_record_name }}"
+        type: "{{ dns_record_type }}"
+        value: "{{ dns_record_value }}"
+        ttl: "{{ dns_record_ttl }}"
+  when: (_dns_record_id | length) <= 0
+          and not dns_record_delete
+          and dns_debug
 
-- name: Create hetzner dns record
+- name: Create dns record
   ansible.builtin.uri:
-    url: "{{ hetzner_dns_api_url }}/records"
+    url: "{{ dns_api_url }}/records"
     body_format: json
     headers:
-      Auth-API-Token: "{{ hetzner_dns_api_token }}"
+      Auth-API-Token: "{{ dns_api_token }}"
     method: post
     body:
-      zone_id: "{{ _hetzner_dns_zone_id }}"
-      name: "{{ hetzner_dns_record_name }}"
-      type: "{{ hetzner_dns_record_type }}"
-      value: "{{ hetzner_dns_record_value }}"
-      ttl: "{{ hetzner_dns_record_ttl }}"
+      zone_id: "{{ _dns_zone_id }}"
+      name: "{{ dns_record_name }}"
+      type: "{{ dns_record_type }}"
+      value: "{{ dns_record_value }}"
+      ttl: "{{ dns_record_ttl }}"
   delegate_to: localhost
-  when: (_hetzner_dns_record_id | length) <= 0
-          and not hetzner_dns_record_delete
-          and not hetzner_dns_dry_run
+  when: (_dns_record_id | length) <= 0
+          and not dns_record_delete
+          and not dns_dry_run
   changed_when: true
 
-- name: Print update hetzner dns record
+- name: Print update dns record
   ansible.builtin.debug:
     msg: |
-      Update hetzner dns record
-        zone_id: "{{ _hetzner_dns_zone_id }}"
-        name: "{{ hetzner_dns_record_name }}"
-        type: "{{ hetzner_dns_record_type }}"
-        value: "{{ hetzner_dns_record_value }}"
-        ttl: "{{ hetzner_dns_record_ttl }}"
-  when: (_hetzner_dns_record_id | length) == 1 
-          and (_hetzner_dns_record_id_exact | length) <= 0 
-          and not hetzner_dns_record_delete
-          and hetzner_dns_debug
+      Update dns record
+        zone_id: "{{ _dns_zone_id }}"
+        name: "{{ dns_record_name }}"
+        type: "{{ dns_record_type }}"
+        value: "{{ dns_record_value }}"
+        ttl: "{{ dns_record_ttl }}"
+  when: (_dns_record_id | length) == 1 
+          and (_dns_record_id_exact | length) <= 0 
+          and not dns_record_delete
+          and dns_debug
 
-- name: Update hetzner dns record
+- name: Update dns record
   ansible.builtin.uri:
-    url: "{{ hetzner_dns_api_url }}/records/{{ _hetzner_dns_record_id[0] }}"
+    url: "{{ dns_api_url }}/records/{{ _dns_record_id[0] }}"
     body_format: json
     headers:
-      Auth-API-Token: "{{ hetzner_dns_api_token }}"
+      Auth-API-Token: "{{ dns_api_token }}"
     method: put
     body:
-      zone_id: "{{ _hetzner_dns_zone_id }}"
-      name: "{{ hetzner_dns_record_name }}"
-      type: "{{ hetzner_dns_record_type }}"
-      value: "{{ hetzner_dns_record_value }}"
-      ttl: "{{ hetzner_dns_record_ttl }}"
+      zone_id: "{{ _dns_zone_id }}"
+      name: "{{ dns_record_name }}"
+      type: "{{ dns_record_type }}"
+      value: "{{ dns_record_value }}"
+      ttl: "{{ dns_record_ttl }}"
   delegate_to: localhost
-  when: (_hetzner_dns_record_id | length) == 1 
-          and (_hetzner_dns_record_id_exact | length) <= 0 
-          and not hetzner_dns_record_delete
-          and not hetzner_dns_dry_run
+  when: (_dns_record_id | length) == 1 
+          and (_dns_record_id_exact | length) <= 0 
+          and not dns_record_delete
+          and not dns_dry_run
   changed_when: true
 
-- name: Print delete hetzner dns record
+- name: Print delete dns record
   ansible.builtin.debug:
     msg: |
-      Delete hetzner dns record
-        id: "{{ _hetzner_dns_record_id[0] }}"
-  when: (_hetzner_dns_record_id | length) == 1 
-          and (_hetzner_dns_record_id_exact | length) == 1
-          and hetzner_dns_record_delete
-          and hetzner_dns_debug
+      Delete dns record
+        id: "{{ _dns_record_id[0] }}"
+  when: (_dns_record_id | length) == 1 
+          and (_dns_record_id_exact | length) == 1
+          and dns_record_delete
+          and dns_debug
 
-- name: Delete hetzner dns record
+- name: Delete dns record
   ansible.builtin.uri:
-    url: "{{ hetzner_dns_api_url }}/records/{{ _hetzner_dns_record_id[0] }}"
+    url: "{{ dns_api_url }}/records/{{ _dns_record_id[0] }}"
     headers:
-      Auth-API-Token: "{{ hetzner_dns_api_token }}"
+      Auth-API-Token: "{{ dns_api_token }}"
     method: delete
   delegate_to: localhost
-  when: (_hetzner_dns_record_id | length) == 1 
-          and (_hetzner_dns_record_id_exact | length) == 1
-          and hetzner_dns_record_delete
-          and not hetzner_dns_dry_run
+  when: (_dns_record_id | length) == 1 
+          and (_dns_record_id_exact | length) == 1
+          and dns_record_delete
+          and not dns_dry_run
   changed_when: true
 
 - name: Fail dry run
   ansible.builtin.fail:
     msg: Fail dry run, to prevent continuing CI
-  when: hetzner_dns_dry_run and hetzner_dns_dry_run_fail
+  when: dns_dry_run and dns_dry_run_fail
 
 ...
